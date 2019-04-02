@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const baseUrl = "http://localhost:8012/api/";
+const baseUrl = "https://hive.thomascoward.co.uk/api/";
 
 const baseApi = axios.create({
   baseURL: baseUrl
