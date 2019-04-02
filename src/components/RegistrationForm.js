@@ -40,6 +40,16 @@ class RegistrationForm extends React.Component {
       return false;
     }
 
+    if (this.state.maxTemp <= this.state.tempToSet) {
+      this.setState({
+        formMessage: "Max target temperature should be greater than temperature to set",
+        formSuccess: false,
+        loading: false
+      });
+
+      return false;
+    }
+
     if (!this.state.agreedPrivacy) {
       this.setState({
         formMessage: "You must agree to the privacy policy to use this service.",
@@ -64,8 +74,9 @@ class RegistrationForm extends React.Component {
         loading: false
       });
     } catch (e) {
+      let message = e.response ? e.response.data.message : "Service is down. Failed to connect to backend.";
       this.setState({
-        formMessage: e.response.data.message,
+        formMessage: message,
         formSuccess: false,
         loading: false
       });
