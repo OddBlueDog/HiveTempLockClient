@@ -116,7 +116,8 @@ class RegistrationForm extends React.Component {
               name="password"
             />
             <small id="passwordHelp" class="form-text text-muted">
-              Beware: your password is stored in plain text
+              Beware: your password is stored in plain text. You should change your Hive account password to something
+              random and unique before using this service.
             </small>
           </div>
           <div className="form-group">
