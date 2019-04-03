@@ -1,6 +1,7 @@
 import React from "react";
 import RegistrationForm from "./RegistrationForm";
 import DeleteForm from "./DeleteForm";
+import LocalForm from "./LocalForm";
 import Privacy from "./Privacy";
 import MainNavbar from "./MainNavbar";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -13,6 +14,7 @@ class App extends React.Component {
           <MainNavbar />
           <Route exact path="/" component={RegistrationForm} />
           <Route path="/delete" component={DeleteForm} />
+          <Route path="/local" component={LocalForm} />
 
           <div className="jumbotron">
             <h1 class="display-4">Source Code</h1>

@@ -110,7 +110,7 @@ class RegistrationForm extends React.Component {
             <input
               className="form-control"
               type="password"
-              placeholder="Hive Passowrd"
+              placeholder="Hive Password"
               value={this.state.password}
               onChange={this.onInputChange}
               name="password"
@@ -193,6 +193,12 @@ class RegistrationForm extends React.Component {
             {this.state.formMessage}
           </div>
         )}
+        <p className="mt-3 alert alert-warning">
+          Disclaimer: This service is currently a work in progress and is in beta. This service comes with absolutely no
+          warranty, please use at your own risk. If you don't wish for your password to be stored as plain text then
+          please do not use this service. You may instead wish to use the server code and host it yourself for security
+          reasons. You can also try the local version but the browser must remain open when in use.
+        </p>
       </div>
     );
   }
