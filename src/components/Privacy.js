@@ -5,7 +5,8 @@ const Privacy = () => {
     <div className="jumbotron">
       <div className="alert bg-warning">
         Please note that your password is stored as plain text, this is due to the way the Hive API requires a password
-        in plain text. Do not use this service if you disagree with this.
+        in plain text. Do not use this service if you disagree with this. You can also try the local version but the
+        browser must remain open when in use.
       </div>
       <h1 class="display-4">Privacy Policy</h1>
       <p>

@@ -1,7 +1,8 @@
 import React from "react";
-import * as backend from "./../apis/backend";
+import * as hive from "./../apis/hive";
+import TemperatureList from "./TemperatureList";
 
-class RegistrationForm extends React.Component {
+class LocalForm extends React.Component {
   state = {
     email: "",
     password: "",
@@ -10,8 +11,38 @@ class RegistrationForm extends React.Component {
     formMessage: null,
     formSuccess: true,
     agreedPrivacy: false,
-    loading: false
+    loading: false,
+    sessionId: null,
+    deviceList: null,
+    failedHiveLogin: false,
+    thermostatId: null,
+    timer: 30000,
+    items: []
   };
+
+  async getDeviceList(sessionId) {
+    return (await hive.deviceList(sessionId)).data.nodes;
+  }
+
+  async getThermostat(deviceList) {
+    const themostat = deviceList.filter(function(node) {
+      return node.name.match(/Thermostat *(.+)*/g) && node.attributes.temperature;
+    });
+
+    return themostat;
+  }
+
+  async setTargetTemp(temperature) {
+    return hive.setTargetTemp(this.state.sessionId, this.state.thermostatId, temperature);
+  }
+
+  getThermostatId(thermostat) {
+    return thermostat[0].id;
+  }
+
+  getCurrentTargetTemp(thermostat) {
+    return thermostat[0].attributes.targetHeatTemperature.targetValue;
+  }
 
   onInputChange = event => {
     const target = event.target;
@@ -26,7 +57,94 @@ class RegistrationForm extends React.Component {
     this.setState({
       loading: true
     });
-    this.createUser();
+    this.login();
+    setInterval(this.temperatureCheckLoop, this.state.timer);
+  };
+
+  temperatureCheckLoop = async () => {
+    if (!this.state.thermostatId || !this.state.sessionId) return;
+
+    const deviceList = await this.getDeviceList(this.state.sessionId);
+    const thermostat = await this.getThermostat(deviceList);
+    const thermostatId = await this.getThermostatId(thermostat);
+
+    const currentTemp = this.getCurrentTargetTemp(thermostat);
+
+    const newItem = {
+      deviceList: deviceList,
+      thermostat: thermostat,
+      thermostatId: thermostatId,
+      text: `Current target temperature is ${currentTemp}`,
+      id: Date.now()
+    };
+
+    this.setState({
+      items: this.state.items.concat(newItem)
+    });
+
+    if (currentTemp > this.state.maxTemp) {
+      const newItem = {
+        text: `Current target temperature of ${currentTemp} is above max target temperature of ${
+          this.state.maxTemp
+        } Now setting target temperature to ${this.state.tempToSet}`,
+        id: Date.now()
+      };
+
+      await this.setTargetTemp(this.state.tempToSet);
+
+      this.setState({
+        items: this.state.items.concat(newItem)
+      });
+    }
+
+    if (this.state.items.length > 20) {
+      this.setState({
+        items: this.state.items.slice(1)
+      });
+    }
+  };
+
+  login = async () => {
+    try {
+      const login = await hive.login(this.state.email, this.state.password);
+      const sessionId = login.data.sessions[0].sessionId;
+      const deviceList = await this.getDeviceList(sessionId);
+      const thermostat = await this.getThermostat(deviceList);
+      const thermostatId = await this.getThermostatId(thermostat);
+
+      const newItem = {
+        text: "Login sucessful",
+        id: Date.now()
+      };
+
+      this.setState({
+        sessionId: sessionId,
+        deviceList: deviceList,
+        thermostatId: thermostatId,
+        loading: false,
+        items: this.state.items.concat(newItem)
+      });
+
+      this.temperatureCheckLoop();
+    } catch (e) {
+      switch (e) {
+        case "USERNAME_PASSWORD_ERROR":
+          console.log("username or password wrong");
+          break;
+        default:
+          console.log("failed to login");
+      }
+
+      const newItem = {
+        text: `Login Failed, please check password and email`,
+        id: Date.now()
+      };
+
+      this.setState({
+        loading: false,
+        items: this.state.items.concat(newItem)
+      });
+    }
   };
 
   validateForm() {
@@ -50,38 +168,8 @@ class RegistrationForm extends React.Component {
       return false;
     }
 
-    if (!this.state.agreedPrivacy) {
-      this.setState({
-        formMessage: "You must agree to the privacy policy to use this service.",
-        formSuccess: false,
-        loading: false
-      });
-
-      return false;
-    }
-
     return true;
   }
-
-  createUser = async () => {
-    if (!this.validateForm()) return;
-
-    try {
-      const result = await backend.createUser(this.state);
-      this.setState({
-        formMessage: result.data.message,
-        formSuccess: true,
-        loading: false
-      });
-    } catch (e) {
-      let message = e.response ? e.response.data.message : "Service is down. Failed to connect to backend.";
-      this.setState({
-        formMessage: message,
-        formSuccess: false,
-        loading: false
-      });
-    }
-  };
 
   render() {
     return (
@@ -90,9 +178,14 @@ class RegistrationForm extends React.Component {
         <p class="lead">
           This utility checks if your hive thermostats current target temperature exceeds your max target temperature.
           If it does exceed your max target temperature then the temperature is set to the temperature you have
-          specified.
-          <strong>Note: Temperature is only checked once every 10 mins.</strong>
+          specified. This is the local version, your details are not transmitted to this services backend, only to Hives
+          api. <strong>Note: Temperature is checked every 30 seconds.</strong>
         </p>
+        <div className="alert bg-success text-white">
+          This version is likely safer than the server based version of this service as your password is only
+          transmitted to the Hive API rather than the backend servers of this service. However you must keep the browser
+          open at all times while it is running.
+        </div>
         <form onSubmit={this.onFormSubmit}>
           <div className="form-group">
             <label for="email">Hive Email</label>
@@ -116,8 +209,7 @@ class RegistrationForm extends React.Component {
               name="password"
             />
             <small id="passwordHelp" class="form-text text-muted">
-              Beware: your password is stored in plain text. You should change your Hive account password to something
-              random and unique before using this service.
+              Your password is not transmitted to this services servers only to Hive apis.
             </small>
           </div>
           <div className="form-group">
@@ -165,22 +257,8 @@ class RegistrationForm extends React.Component {
               This is the tempeature to set the thermostat to if the max target temperature is exceeded.
             </small>
           </div>
-          <div class="form-check">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              name="agreedPrivacy"
-              id="agreedPrivacy"
-              checked={this.state.agreedPrivacy}
-              onChange={this.onInputChange}
-            />
-            <label class="form-check-label" for="agree">
-              By ticking this box you agree that your password will be stored as plain text and agree to the privacy
-              policy.
-            </label>
-          </div>
           <button type="submit" className="btn btn-primary mt-3" disabled={this.state.loading}>
-            Submit
+            Start
           </button>
         </form>
         {this.state.loading && (
@@ -193,15 +271,15 @@ class RegistrationForm extends React.Component {
             {this.state.formMessage}
           </div>
         )}
+        <TemperatureList items={this.state.items} />
+
         <p className="mt-3 alert alert-warning">
           Disclaimer: This service is currently a work in progress and is in beta. This service comes with absolutely no
-          warranty, please use at your own risk. If you don't wish for your password to be stored as plain text then
-          please do not use this service. You may instead wish to use the server code and host it yourself for security
-          reasons. You can also try the local version but the browser must remain open when in use.
+          warranty, please use at your own risk.
         </p>
       </div>
     );
   }
 }
 
-export default RegistrationForm;
+export default LocalForm;

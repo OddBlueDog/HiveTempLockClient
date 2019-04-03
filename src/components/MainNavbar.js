@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink
-} from "reactstrap";
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from "reactstrap";
 
 export default class MainNav extends React.Component {
   constructor(props) {
@@ -37,6 +29,9 @@ export default class MainNav extends React.Component {
               </NavItem>
               <NavItem>
                 <NavLink href="/delete">Delete</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink href="/local">Local</NavLink>
               </NavItem>
             </Nav>
           </Collapse>

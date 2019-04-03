@@ -56,8 +56,7 @@ class DeleteForm extends React.Component {
       <div className="jumbotron">
         <h1 class="display-4">Hive Temperature Lock - Delete</h1>
         <p class="lead">
-          Please input the details you used initially when using this app to
-          create a temperature lock.
+          Please input the details you used initially when using this app to create a temperature lock.
         </p>
         <form onSubmit={this.onFormSubmit}>
           <div className="form-group">
@@ -76,14 +75,11 @@ class DeleteForm extends React.Component {
             <input
               className="form-control"
               type="password"
-              placeholder="Hive Passowrd"
+              placeholder="Hive Password"
               value={this.state.password}
               onChange={this.onInputChange}
               name="password"
             />
-            <small id="passwordHelp" class="form-text text-muted">
-              Beware: your password is stored in plain text
-            </small>
           </div>
 
           <button type="submit" className="btn btn-primary mt-3">
@@ -91,11 +87,7 @@ class DeleteForm extends React.Component {
           </button>
         </form>
         {this.state.formMessage && (
-          <div
-            className={`alert mb-0 mt-3 ${
-              this.state.formSuccess ? "alert-success" : "alert-danger"
-            }`}
-          >
+          <div className={`alert mb-0 mt-3 ${this.state.formSuccess ? "alert-success" : "alert-danger"}`}>
             {this.state.formMessage}
           </div>
         )}
