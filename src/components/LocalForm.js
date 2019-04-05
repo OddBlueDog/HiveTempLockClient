@@ -44,6 +44,10 @@ class LocalForm extends React.Component {
     return thermostat[0].attributes.targetHeatTemperature.targetValue;
   }
 
+  getCurrentReportedValue(thermostat) {
+    return thermostat[0].attributes.targetHeatTemperature.reportedValue;
+  }
+
   onInputChange = event => {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
@@ -69,6 +73,7 @@ class LocalForm extends React.Component {
     const thermostatId = await this.getThermostatId(thermostat);
 
     const currentTemp = this.getCurrentTargetTemp(thermostat);
+    const currentReportedTemp = this.getCurrentReportedValue(thermostat);
 
     const newItem = {
       deviceList: deviceList,
@@ -82,9 +87,9 @@ class LocalForm extends React.Component {
       items: this.state.items.concat(newItem)
     });
 
-    if (currentTemp > this.state.maxTemp) {
+    if (currentTemp > this.state.maxTemp || currentReportedTemp > this.state.maxTemp) {
       const newItem = {
-        text: `Current target temperature of ${currentTemp} is above max target temperature of ${
+        text: `Current target temperature of ${currentTemp} or reported tempearture of ${currentReportedTemp} is above max target temperature of ${
           this.state.maxTemp
         } Now setting target temperature to ${this.state.tempToSet}`,
         id: Date.now()
@@ -276,6 +281,10 @@ class LocalForm extends React.Component {
         <p className="mt-3 alert alert-warning">
           Disclaimer: This service is currently a work in progress and is in beta. This service comes with absolutely no
           warranty, please use at your own risk.
+        </p>
+        <p className="mt-3 alert alert-info">
+          Please note, this will also turn off schedule and boost, turning it back to manual if it exceeds your maximum
+          temperature.
         </p>
       </div>
     );

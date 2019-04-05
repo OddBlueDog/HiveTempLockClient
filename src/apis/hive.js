@@ -38,6 +38,15 @@ export async function setTargetTemp(sessionId, deviceId, temperature) {
           attributes: {
             targetHeatTemperature: {
               targetValue: temperature
+            },
+            activeScheduleLock: {
+              targetValue: true
+            },
+            scheduleLockDuration: {
+              targetValue: 0
+            },
+            activeHeatCoolMode: {
+              targetValue: "HEAT"
             }
           }
         }
