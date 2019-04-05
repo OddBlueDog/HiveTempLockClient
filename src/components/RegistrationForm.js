@@ -91,7 +91,7 @@ class RegistrationForm extends React.Component {
           This utility checks if your hive thermostats current target temperature exceeds your max target temperature.
           If it does exceed your max target temperature then the temperature is set to the temperature you have
           specified.
-          <strong>Note: Temperature is only checked once every 10 mins.</strong>
+          <strong>Note: Temperature is only checked once every 5 mins.</strong>
         </p>
         <form onSubmit={this.onFormSubmit}>
           <div className="form-group">
@@ -198,6 +198,10 @@ class RegistrationForm extends React.Component {
           warranty, please use at your own risk. If you don't wish for your password to be stored as plain text then
           please do not use this service. You may instead wish to use the server code and host it yourself for security
           reasons. You can also try the local version but the browser must remain open when in use.
+        </p>
+        <p className="mt-3 alert alert-info">
+          Please note, this will also turn off schedule and boost, turning it back to manual if it exceeds your maximum
+          temperature.
         </p>
       </div>
     );
