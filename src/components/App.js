@@ -11,9 +11,6 @@ class App extends React.Component {
     return (
       <Router>
         <div className="container">
-          <div className="alert bg-warning text-white">
-            Hive have changed their API and this app no longer works until further notice
-          </div>
           <MainNavbar />
           <Route exact path="/" component={RegistrationForm} />
           <Route path="/delete" component={DeleteForm} />

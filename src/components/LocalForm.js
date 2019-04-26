@@ -79,7 +79,7 @@ class LocalForm extends React.Component {
       deviceList: deviceList,
       thermostat: thermostat,
       thermostatId: thermostatId,
-      text: `Current target temperature is ${currentTemp}`,
+      text: `Current target temperature is ${currentTemp} or ${currentReportedTemp}`,
       id: Date.now()
     };
 
