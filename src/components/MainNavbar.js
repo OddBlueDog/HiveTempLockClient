@@ -33,6 +33,9 @@ export default class MainNav extends React.Component {
               <NavItem>
                 <NavLink href="/local">Local</NavLink>
               </NavItem>
+              <NavItem>
+                <NavLink href="/change">Change Log</NavLink>
+              </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
