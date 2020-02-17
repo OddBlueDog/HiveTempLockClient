@@ -130,6 +130,8 @@ class RegistrationForm extends React.Component {
               name="maxTemp"
             >
               <option selected>Choose...</option>
+              <option value="20">20</option>
+              <option value="20.5">20.5</option>
               <option value="21">21</option>
               <option value="21.5">21.5</option>
               <option value="22">22</option>
@@ -137,6 +139,8 @@ class RegistrationForm extends React.Component {
               <option value="23">23</option>
               <option value="23.5">23.5</option>
               <option value="24">24</option>
+              <option value="24.5">24.5</option>
+              <option value="25">25</option>
             </select>
             <small id="maxTempHelp" class="form-text text-muted">
               This is the maximum target temperature you ever want your hive thermostat to be set at before the
@@ -153,6 +157,8 @@ class RegistrationForm extends React.Component {
               name="tempToSet"
             >
               <option selected>Choose...</option>
+              <option value="20">20</option>
+              <option value="20.5">20.5</option>
               <option value="21">21</option>
               <option value="21.5">21.5</option>
               <option value="22">22</option>
@@ -160,6 +166,8 @@ class RegistrationForm extends React.Component {
               <option value="23">23</option>
               <option value="23.5">23.5</option>
               <option value="24">24</option>
+              <option value="24.5">24.5</option>
+              <option value="25">25</option>
             </select>
             <small id="tempToSetHelp" className="form-text text-muted">
               This is the tempeature to set the thermostat to if the max target temperature is exceeded.
