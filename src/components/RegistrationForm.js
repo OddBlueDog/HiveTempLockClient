@@ -89,7 +89,7 @@ class RegistrationForm extends React.Component {
         <h1 class="display-4">Hive Temperature Lock</h1>
         <p class="lead">
           This utility checks if your all hive thermostats (you can have multiple thermostats on an account) current target temperatures exceeds your max target temperature.
-          If it does exceed your max target temperature then the temperature is set to the temperature you have
+          If it does exceed your max target temperature then the target temperature is set to the temperature you have
           specified. For any questions please contact me: thomas01155@gmail.com
           <strong>Note: Temperature is only checked once every 5 mins.</strong>
         </p>
