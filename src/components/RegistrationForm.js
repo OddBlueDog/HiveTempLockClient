@@ -90,9 +90,10 @@ class RegistrationForm extends React.Component {
         <p class="lead">
           This utility checks if your all hive thermostats (you can have multiple thermostats on an account) current target temperatures exceeds your max target temperature.
           If it does exceed your max target temperature then the target temperature is set to the temperature you have
-          specified. For any questions please contact me: thomas01155@gmail.com
+          specified. For any questions please contact me: thomas01155@gmail.com 
           <strong>Note: Temperature is only checked once every 5 mins.</strong>
         </p>
+        <p><strong>This app is not compatible with 2FA (two factor authentication)</strong></p>
         <form onSubmit={this.onFormSubmit}>
           <div className="form-group">
             <label for="email">Hive Email</label>
@@ -141,6 +142,10 @@ class RegistrationForm extends React.Component {
               <option value="24">24</option>
               <option value="24.5">24.5</option>
               <option value="25">25</option>
+              <option value="25.5">25.5</option>
+              <option value="26.0">26.0</option>
+              <option value="26.5">26.5</option>
+              <option value="27.7">26.0</option>
             </select>
             <small id="maxTempHelp" class="form-text text-muted">
               This is the maximum target temperature you ever want your hive thermostat to be set at before the

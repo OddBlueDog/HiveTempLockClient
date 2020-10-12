@@ -28,10 +28,7 @@ export default class MainNav extends React.Component {
                 <NavLink href="/">Home</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="/delete">Delete</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="/local">Local</NavLink>
+                <NavLink href="/delete">Delete / Remove</NavLink>
               </NavItem>
               <NavItem>
                 <NavLink href="/change">Change Log</NavLink>

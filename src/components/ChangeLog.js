@@ -3,6 +3,10 @@ import React from "react";
 const ChangeLog = () => {
   return (
     <div className="jumbotron">
+      <p>12th Ocotober 2020</p>
+      <ul>
+        <li>Updated login api, app should be working again</li>
+      </ul>
       <p>17th Febuary 2020</p>
       <ul>
         <li>Explanded lower range to 20 and upper range to 25</li>
